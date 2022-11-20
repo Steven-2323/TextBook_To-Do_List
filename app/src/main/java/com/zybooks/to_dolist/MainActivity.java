@@ -5,25 +5,31 @@ import android.widget.EditText;
 import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
 import java.io.IOException;
+import com.zybooks.to_dolist.databinding.ActivityMainBinding;
+import com.google.android.material.snackbar.Snackbar;
 
 public class MainActivity extends AppCompatActivity {
 
     private ToDoList mToDoList;
-    private EditText mItemEditText;
-    private TextView mItemListTextView;
+    private ActivityMainBinding binding;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        mItemEditText = findViewById(R.id.todo_item);
-        mItemListTextView = findViewById(R.id.item_list);
-
-        findViewById(R.id.add_button).setOnClickListener(view -> addButtonClick());
         findViewById(R.id.clear_button).setOnClickListener(view -> clearButtonClick());
 
         mToDoList = new ToDoList(this);
+        
+        //sets the on click listener for the fab button; replace the snackbar code with the fab code
+        binding.fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
+                        .setAction("Action", null).show();
+            }
+        });
     }
 
     @Override
@@ -51,33 +57,6 @@ public class MainActivity extends AppCompatActivity {
         catch (IOException ex) {
             ex.printStackTrace();
         }
-    }
-
-    private void addButtonClick() {
-
-        // Ignore any leading or trailing spaces
-        String item = mItemEditText.getText().toString().trim();
-
-        // Clear the EditText so it's ready for another item
-        mItemEditText.setText("");
-
-        // Add the item to the list and display it
-        if (item.length() > 0) {
-            mToDoList.addItem(item);
-            displayList();
-        }
-    }
-
-    private void displayList() {
-
-        // Display a numbered list of items
-        StringBuffer itemText = new StringBuffer();
-        String[] items = mToDoList.getItems();
-        for (int i = 0; i < items.length; i++) {
-            itemText.append(i + 1).append(". ").append(items[i]).append("\n");
-        }
-
-        mItemListTextView.setText(itemText);
     }
 
     private void clearButtonClick() {
